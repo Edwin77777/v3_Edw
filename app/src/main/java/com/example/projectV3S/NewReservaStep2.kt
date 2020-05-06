@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import com.example.projectV3S.UTILS.Constantes
 import kotlinx.android.synthetic.main.activity_new_reserva_step2.*
 
@@ -13,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_new_reserva_step2.*
 
 class NewReservaStep2 : AppCompatActivity() {
 
-    var num_particif1 : String = Constantes.EMPTY
+    var num_particif1: String = Constantes.EMPTY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +28,8 @@ class NewReservaStep2 : AppCompatActivity() {
         SetearSpinnersyeditt()
 
         bt_conti_to_step3.setOnClickListener {
-            Comprobacionlayers()
+
+
         }
 
 
@@ -51,11 +53,12 @@ class NewReservaStep2 : AppCompatActivity() {
         sp_cedula_step2_14.id = 14
         sp_cedula_step2_15.id = 15
         sp_cedula_step2_16.id = 16
-        for (i in 1..num_particif1.toInt()){
+        for (i in 1..num_particif1.toInt()) {
             //var keystring1 = "sp_cedula_step2_" + i.toString()
             //sp_cedula_step2_${i}.visibility = View.VISIBLE
             //keystring1.visibility = View.VISIBLE
             findViewById<Spinner>(i).visibility = View.VISIBLE
+
         }
 
         et_user_num_cedu_step2_1.id = 21
@@ -74,19 +77,40 @@ class NewReservaStep2 : AppCompatActivity() {
         et_user_num_cedu_step2_14.id = 34
         et_user_num_cedu_step2_15.id = 35
         et_user_num_cedu_step2_16.id = 36
-        for (j in 21..(20 + num_particif1.toInt())){
+        for (j in 21..(20 + num_particif1.toInt())) {
             //var keystring1 = "sp_cedula_step2_" + i.toString()
             //sp_cedula_step2_${i}.visibility = View.VISIBLE
             //keystring1.visibility = View.VISIBLE
             findViewById<EditText>(j).visibility = View.VISIBLE
         }
+        Comprobacionlayers()
     }
 
     private fun Comprobacionlayers() {
 
+        for (i in 21..(20 + num_particif1.toInt())) {
+
+            findViewById<EditText>(i).setOnClickListener {
+
+                val num_docu = findViewById<EditText>(i).text.toString()
+                if (num_docu.isNotEmpty()) {
+                    for (k in 21..(i-1) step 1) {
+                        val new_num = findViewById<EditText>(k).text.toString()
+                        if (new_num.isNotEmpty() && num_docu == new_num) {
+                            Toast.makeText(this, "Documento ya ingresado", Toast.LENGTH_SHORT).show()
+                            findViewById<EditText>(i).setText("")
+                        }
+
+
+                    }
+
+
+                }
+            }
+
+
+        }
 
 
     }
-
-
 }
