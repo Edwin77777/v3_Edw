@@ -14,7 +14,7 @@ class ReservaDetalleActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val reservasLocal: ReservasLocal =intent?.getSerializableExtra("reserva")as ReservasLocal
-        tv_cancha.text =reservasLocal.cancha
+        tv_cancha.text =reservasLocal.escenario
        // tv_fecha.text=reservas.fecha
 
     }

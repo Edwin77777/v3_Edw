@@ -7,16 +7,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import com.example.projectV3S.Room.NewResRoom
 import com.example.projectV3S.Room.NewresDAO
 import com.example.projectV3S.UTILS.Constantes
 import com.example.projectV3S.model.Reservas
+import com.example.projectV3S.model.ReservasLocal
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_new_reserva_step3.*
 
 class NewReservaStep3 : AppCompatActivity() {
     var num_particif2 : String = Constantes.EMPTY
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,6 +105,10 @@ class NewReservaStep3 : AppCompatActivity() {
         val newresDAO: NewresDAO = NewResRoom.database1.NewresDAO()
         val nuevaReservRoom = newresDAO.searchEscenari()
 
+        val database = FirebaseDatabase.getInstance()
+        val myRef = database.getReference("reservasuser")
+        val idreserva = myRef.push().key
+
 
         val cancha = nuevaReservRoom.escen
         val fech =  nuevaReservRoom.fecha
@@ -123,8 +130,16 @@ class NewReservaStep3 : AppCompatActivity() {
         val part15= nuevaReservRoom.participante15
         val part16= nuevaReservRoom.participante16
 
+
         writeNewReser(hora, fech, cancha, part1, part2, part3, part4, part5, part6, part7, part8, part9, part10, part11, part12,
             part13 , part14, part15, part16)
+
+        writeReserLocal(idreserva, hora, fech, cancha, part1, part2, part3, part4, part5, part6, part7, part8, part9, part10, part11, part12,
+            part13 , part14, part15, part16)
+
+
+
+
 
       /*  if (!part1.isNullOrEmpty() && !part2.isNullOrEmpty() && !part3.isNullOrEmpty() && !part4.isNullOrEmpty() && !part5.isNullOrEmpty()
             && !part6.isNullOrEmpty() && !part7.isNullOrEmpty() && !part8.isNullOrEmpty() && !part9.isNullOrEmpty() && !part10.isNullOrEmpty()
@@ -135,8 +150,6 @@ class NewReservaStep3 : AppCompatActivity() {
 
 
         }*/
-
-
 
 
 
@@ -152,22 +165,67 @@ class NewReservaStep3 : AppCompatActivity() {
             val database = FirebaseDatabase.getInstance()
             val myRef = database.getReference("reservas")
 
-            /*val reservas = Reservas(
+
+            val reservas = Reservas(
                 hora = a, fecha = b, escenario = c, num_doc_part1 = d, num_doc_part2 = e, num_doc_part3 = f, num_doc_part4 = g,
                 num_doc_part5 = h, num_doc_part6 = i, num_doc_part7 = j, num_doc_part8 = k, num_doc_part9 = l, num_doc_part10 = m,
                 num_doc_part11 = n, num_doc_part12 = o, num_doc_part13 = p, num_doc_part14 = q, num_doc_part15 = r, num_doc_part16 = s
-            )*/
-            val reservas = Reservas(
-                hora = a, fecha = b, escenario = c, num_doc_part1 = d, num_doc_part2 = e, num_doc_part3 = f)
+            )
+           // val reservas = Reservas(
+            //    hora = a, fecha = b, escenario = c, num_doc_part1 = d, num_doc_part2 = e, num_doc_part3 = f)
 
-            myRef.child(b!!).child(c!!).child(user1!!.uid).setValue(reservas).addOnSuccessListener {
-                var intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
+            myRef.child(b!!).child(c!!).child(user1!!.uid).setValue(reservas)
 
 
         }
+
+    private fun writeReserLocal(z:String?, a: String?, b:String?, c: String?, d: String?,
+                                e: String?, f: String?, g: String?, h: String?, i: String?,j:String?,k:String?,
+                                l:String?, m:String?, n:String?, o:String?, p:String?, q:String?, r:String?, s:String?){
+
+        val auth: FirebaseAuth
+        auth = FirebaseAuth.getInstance()
+        val user2 = auth.currentUser
+
+
+        val database = FirebaseDatabase.getInstance()
+        val myRef = database.getReference("reservasuser")
+
+
+        val reservasLocal = ReservasLocal(
+            id = z, hora = a, fecha = b, escenario = c, num_doc_part1 = d, num_doc_part2 = e, num_doc_part3 = f, num_doc_part4 = g,
+            num_doc_part5 = h, num_doc_part6 = i, num_doc_part7 = j, num_doc_part8 = k, num_doc_part9 = l, num_doc_part10 = m,
+            num_doc_part11 = n, num_doc_part12 = o, num_doc_part13 = p, num_doc_part14 = q, num_doc_part15 = r, num_doc_part16 = s
+        )
+        myRef.child(user2!!.uid).child(z!!).setValue(reservasLocal).addOnSuccessListener {
+            var intent = Intent(this, MainActivity::class.java)
+           // intent.putExtra("idreserva",z)
+           // startActivityForResult(intent, 2222)
+            startActivity(intent)
+            finish()
+        }
+
+
+    }
+
+   /* override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 2222 && resultCode == Activity.RESULT_CANCELED){
+            Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show()
+        }
+        if (requestCode == 2222 && resultCode == Activity.RESULT_OK){
+
+            Toast.makeText(this, "BBIIIEENNNN", Toast.LENGTH_SHORT).show()
+
+          /*  var datafhora = data?.extras
+            horafHoradRVA = datafhora?.getString("horaselec").toString()
+            et_new_horari_inten.setText(horafHoradRVA)*/
+
+            //Log.d("oooe", horafHoradRVA)
+
+        }
+
+        super.onActivityResult(requestCode, resultCode, data)
+    }*/
 
 }
 

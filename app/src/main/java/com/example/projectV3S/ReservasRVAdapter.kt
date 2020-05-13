@@ -13,6 +13,8 @@ import kotlinx.android.synthetic.main.item_rv.view.*
 
 class ReservasRVAdapter(
     context: Context, reservasLocalList: ArrayList<ReservasLocal>
+   /* private val context: Context,
+    private val reservasList:ArrayList<ReservasLocal>*/
 ) : RecyclerView.Adapter<ReservasRVAdapter.ReservasViewHolder>(){
 
     private var reservasList = emptyList<ReservasLocal>()
@@ -26,7 +28,7 @@ class ReservasRVAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ReservasRVAdapter.ReservasViewHolder {
+    ): ReservasViewHolder {
         var itemView =LayoutInflater.from(context).inflate(R.layout.item_rv,parent,false)
         return ReservasViewHolder(itemView,context)
 
@@ -37,7 +39,7 @@ class ReservasRVAdapter(
     }
 
     override fun onBindViewHolder(
-        holder: ReservasRVAdapter.ReservasViewHolder,
+        holder: ReservasViewHolder,
         position: Int)
     {
         val reservasLocal: ReservasLocal = reservasList[position]
@@ -53,14 +55,14 @@ class ReservasRVAdapter(
         }
 
         fun binReserva(reserva: ReservasLocal){
-            itemView.tv_cancha.text=reserva.cancha
-            itemView.tv_estado.text=reserva.estado
+            itemView.tv_cancha.text=reserva.escenario
+           // itemView.tv_estado.text=reserva.estado
             itemView.tv_fecha.text=reserva.fecha
             itemView.tv_hora.text=reserva.hora
-            itemView.iv_estado.setImageResource(reserva.imagen)
+           // itemView.iv_estado.setImageResource(reserva.imagen)
 
             itemView.setOnClickListener{
-                Toast.makeText(context,reserva.cancha,Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,reserva.escenario,Toast.LENGTH_SHORT).show()
                 var intent = Intent(context,ReservaDetalleActivity::class.java)
                 intent.putExtra("reserva",reserva).addFlags(FLAG_ACTIVITY_NEW_TASK)
 
@@ -71,7 +73,7 @@ class ReservasRVAdapter(
             }
 
             itemView.setOnLongClickListener{
-                Toast.makeText(context,reserva.cancha+"Long",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,reserva.escenario+"Long",Toast.LENGTH_SHORT).show()
                 return@setOnLongClickListener true
             }
 
